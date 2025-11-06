@@ -1,0 +1,1947 @@
+git init
+git add .
+git commit -m "Initial commit - maquette"
+git branch -M main
+git remote add origin https://github.com/<ton-user>/centraide-probono.git
+git push -u origin main
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Babillard Pro Bono</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Styles -->
+    <style>
+      :root {
+        --red: #e1251b;
+        --bg: #f7f7f8;
+        --ink: #0f172a;
+        --muted: #6b7280;
+        --card: #fff;
+        --ring: #e5e7eb;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial,
+          sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+      }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: #fff;
+        border-bottom: 1px solid var(--ring);
+      }
+      .wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 16px;
+      }
+      .topbar {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        justify-content: space-between;
+      }
+      .brand {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
+      .brand a {
+        display: flex;
+        align-items: center;
+      }
+      .brand img {
+        height: 64px;
+        width: auto;
+        background: transparent;
+        border: 0;
+        padding: 0;
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      button,
+      select,
+      input,
+      textarea {
+        font: inherit;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid var(--ring);
+        background: #fff;
+        padding: 10px 14px;
+        border-radius: 12px;
+        cursor: pointer;
+      }
+      .btn-primary {
+        background: var(--red);
+        border-color: var(--red);
+        color: #fff;
+      }
+      /* Actif = contour rouge, texte rouge */
+      .btn-toggle[aria-pressed="true"],
+      .btn[aria-pressed="true"] {
+        background: #fff;
+        border-color: var(--red);
+        color: var(--red);
+      }
+      .btn:focus {
+        outline: 3px solid rgba(225, 37, 27, 0.2);
+      }
+      main .wrap {
+        padding-top: 20px;
+      }
+      .divider {
+        height: 1px;
+        background: var(--ring);
+        margin: 14px 0;
+      }
+      .filters {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        margin: 14px 0 10px;
+      }
+      .filters .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .filters label {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .filters input,
+      .filters select {
+        border: 1px solid var(--ring);
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: #fff;
+      }
+      .board {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+      @media (max-width: 1024px) {
+        .board {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 700px) {
+        .board {
+          grid-template-columns: 1fr;
+        }
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--ring);
+        border-radius: 16px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        border: 1px solid var(--ring);
+        background: #fff;
+      }
+      .badge.red {
+        background: #fff0f0;
+        border-color: #f3d4d1;
+        color: #a61914;
+      }
+      .badge.green {
+        background: #eefbf3;
+        border-color: #c9f0d8;
+        color: #166534;
+      }
+      .title {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0;
+      }
+      .meta {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .tag {
+        font-size: 11px;
+        background: #f2f4f7;
+        border: 1px solid var(--ring);
+        padding: 2px 8px;
+        border-radius: 999px;
+      }
+      .pill {
+        display: inline-block;
+        background: #fff;
+        border: 1px solid var(--ring);
+        border-radius: 999px;
+        padding: 8px 12px;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .icons {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        width: 28px;
+        height: 28px;
+        border: 1px solid var(--ring);
+        border-radius: 999px;
+        background: #fff;
+      }
+      .icon svg {
+        width: 18px;
+        height: 18px;
+        display: block;
+      }
+      .icon[title] {
+        cursor: help;
+      }
+      dialog {
+        border: none;
+        border-radius: 16px;
+        max-width: 720px;
+        width: 96%;
+        padding: 0;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+      }
+      dialog::backdrop {
+        background: rgba(15, 23, 42, 0.5);
+      }
+      .modal {
+        padding: 18px;
+      }
+      .modal header {
+        position: sticky;
+        top: 0;
+        border-bottom: 1px solid var(--ring);
+      }
+      .modal h3 {
+        margin: 0;
+        font-size: 18px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+      .grid .col-span-2 {
+        grid-column: span 2;
+      }
+      .f {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .f label {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .f input,
+      .f select,
+      .f textarea {
+        border: 1px solid var(--ring);
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: #fff;
+      }
+      .modal footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        padding: 12px 18px;
+        border-top: 1px solid var(--ring);
+      }
+      .empty {
+        display: none;
+        text-align: center;
+        color: var(--muted);
+        padding: 24px;
+      }
+      .reviews {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .review-card {
+        background: var(--card);
+        border: 1px solid var(--ring);
+        border-radius: 16px;
+        padding: 18px 20px;
+      }
+      .review-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .review-title {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
+      .review-meta {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .review-pill {
+        display: inline-block;
+        background: #fff;
+        border: 1px solid var(--ring);
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+      .choice-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+      .choice {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        border: 1px solid var(--ring);
+        border-radius: 12px;
+        padding: 14px;
+        background: #fff;
+        cursor: pointer;
+      }
+      .choice h4 {
+        margin: 0;
+        font-size: 16px;
+      }
+      .choice p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .block-stylised-title {
+        margin: 0;
+        text-align: center;
+      }
+      .block-stylised-title__line {
+        display: block;
+      }
+      .block-stylised-title__line--big-bold {
+        font-family: Montserrat, Inter, system-ui, -apple-system, Segoe UI,
+          Roboto, Arial, sans-serif;
+        font-weight: 800;
+        font-size: 28px;
+        line-height: 1.08;
+        letter-spacing: 0.2px;
+        margin: 0;
+      }
+      @media (min-width: 700px) {
+        .block-stylised-title__line--big-bold {
+          font-size: 32px;
+        }
+      }
+      .block-stylised-title__line--small {
+        font-family: Montserrat, Inter, system-ui, -apple-system, Segoe UI,
+          Roboto, Arial, sans-serif;
+        font-weight: 500;
+        font-size: 13px;
+        color: var(--muted);
+        letter-spacing: 0.2px;
+        display: block;
+        margin-top: 2px;
+      }
+      .hero {
+        background: #fff;
+        border: 1px solid var(--ring);
+        border-radius: 16px;
+        padding: 24px 24px;
+      }
+      .hero .eyebrow {
+        color: var(--red);
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+        font-size: 12px;
+      }
+      .hero h1 {
+        font-family: Montserrat, Inter, system-ui, -apple-system, Segoe UI,
+          Roboto, Arial, sans-serif;
+        font-weight: 800;
+        font-size: 32px;
+        margin: 6px 0 8px;
+      }
+      .hero p.lead {
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--ink);
+        margin: 8px 0;
+      }
+      .home-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 16px;
+      }
+      .success-teaser {
+        margin-top: 18px;
+        padding: 18px 20px;
+        background: #fff;
+        border: 1px solid var(--ring);
+        border-radius: 16px;
+      }
+      .success-teaser .title {
+        font-size: 18px;
+      }
+      .link-like {
+        border: 1px solid var(--ring);
+        background: #fff;
+        border-radius: 12px;
+        padding: 10px 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .link-like:hover {
+        border-color: var(--red);
+        color: var(--red);
+      }
+      .hero {
+        position: relative;
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid var(--ring);
+        border-radius: 16px;
+        padding: 24px 24px;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 6px;
+        background: linear-gradient(90deg, var(--red), #ff6a5b 45%, var(--red));
+      }
+      .hero::after {
+        content: "";
+        position: absolute;
+        right: -40px;
+        top: -40px;
+        width: 220px;
+        height: 220px;
+        border-radius: 999px;
+        background: radial-gradient(
+          closest-side,
+          rgba(225, 37, 27, 0.08),
+          transparent 70%
+        );
+      }
+      .hero .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--red);
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+        font-size: 12px;
+      }
+      .hero .eyebrow::before {
+        content: "❤";
+        font-size: 12px;
+      }
+      .hero h1 {
+        font-family: Montserrat, Inter, system-ui, -apple-system, Segoe UI,
+          Roboto, Arial, sans-serif;
+        font-weight: 800;
+        font-size: 32px;
+        margin: 6px 0 8px;
+      }
+      .hero p.lead {
+        font-size: 14px;
+        color: var(--ink);
+        margin: 6px 0;
+      }
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 16px;
+        align-items: start;
+      }
+      @media (max-width: 900px) {
+        .hero-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .home-actions .card {
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .home-actions .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 6px 0 2px;
+      }
+      .chip {
+        border: 1px solid var(--ring);
+        background: #fff;
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+      .success-teaser {
+        margin-top: 18px;
+        padding: 18px 20px;
+        background: #fff;
+        border: 1px solid var(--ring);
+        border-radius: 16px;
+      }
+      .success-teaser .title {
+        font-size: 18px;
+      }
+      .link-like {
+        border: 1px solid var(--ring);
+        background: #fff;
+        border-radius: 12px;
+        padding: 10px 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .link-like:hover {
+        border-color: var(--red);
+        color: var(--red);
+      }
+      .download-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+      @media (max-width: 800px) {
+        .download-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .download {
+        background: #fff;
+        border: 1px solid var(--ring);
+        border-radius: 16px;
+        padding: 16px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .download .icon {
+        width: 36px;
+        height: 36px;
+      }
+      .download .meta small {
+        color: var(--muted);
+        display: block;
+      }
+      .download .soon {
+        margin-left: auto;
+        border: 1px dashed var(--ring);
+        padding: 10px 14px;
+        border-radius: 12px;
+        color: var(--muted);
+        background: #fafafa;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="wrap topbar">
+        <div class="brand">
+          <a
+            class="navbar__home-link"
+            href="https://www.centraide-mtl.org/?_gl=1*d7oivg*_up*MQ..*_gs*MQ..&amp;gclid=CjwKCAjw0sfHBhB6EiwAQtv5qWrRWknatYwpXp84u33J-SRao4cbFRe-5B0Kxrg_3JFLDlI1sW1BTxoCQjoQAvD_BwE&amp;gbraid=0AAAAADs6TJOQX0WC563xhauxJ1XihzOhZ"
+          >
+            <img
+              src="https://www.centraide-mtl.org/wp-content/uploads/2025/01/Logo_Centraide_gen-1.png"
+              alt="Centraide du Grand Montréal"
+              class="navbar__logo"
+            />
+          </a>
+          <h2
+            class="block-stylised-title theme-block aligndefault"
+            style="margin-left: 6px"
+          >
+            <span
+              class="block-stylised-title__line block-stylised-title__line--big-bold"
+              >Babillard Pro Bono</span
+            >
+            <span
+              class="block-stylised-title__line block-stylised-title__line--small"
+              >Offres de services professionnels et offres de bénévolats
+              professionnels</span
+            >
+          </h2>
+        </div>
+        <div class="actions">
+          <button class="btn" id="btnHome" title="Accueil">Accueil</button>
+          <button
+            class="btn btn-toggle"
+            id="btnFilterService"
+            aria-pressed="false"
+            title="Voir les offres de services"
+          >
+            Offres de services
+          </button>
+          <button
+            class="btn btn-toggle"
+            id="btnFilterBenevolat"
+            aria-pressed="false"
+            title="Voir les offres de bénévolat"
+          >
+            Offres de bénévolat
+          </button>
+          <button
+            class="btn"
+            id="btnSuccess"
+            aria-pressed="false"
+            title="Voir les cas de succès"
+          >
+            Cas de succès
+          </button>
+          <button class="btn" id="btnGuides" title="Boîte à outils">
+            Boîte à outils
+          </button>
+          <button class="btn btn-primary" id="btnPost">
+            Publier une offre
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- PAGE 0 : Accueil -->
+    <main id="pageHome">
+      <div class="wrap">
+        <section class="hero" aria-label="Introduction Pro Bono">
+          <div class="hero-grid">
+            <div>
+              <span class="eyebrow">Quand l’expertise rencontre le cœur</span>
+              <h1
+                class="block-stylised-title__line block-stylised-title__line--big-bold"
+                style="text-align: left"
+              >
+                Bienvenue sur le babillard Centraide
+                <span style="color: var(--red)">Pro Bono</span>.
+              </h1>
+              <div class="chips">
+                <span class="chip">Simple</span>
+                <span class="chip">Humain</span>
+                <span class="chip">Efficace</span>
+              </div>
+              <p class="lead">
+                Ici, des organismes avec un besoin précis rencontrent des
+                entreprises prêtes à offrir leur expertise gratuitement.
+              </p>
+              <p class="lead">
+                Déposez un besoin. Proposez un service. Lancez une collaboration
+                simple, humaine et efficace.
+              </p>
+              <div class="row" style="margin-top: 10px">
+                <span></span>
+                <button class="btn btn-primary" id="goToBoard">
+                  Accéder au Babillard
+                </button>
+              </div>
+            </div>
+            <div>
+              <div class="home-actions">
+                <article class="card">
+                  <h3 class="title">Je suis un organisme</h3>
+                  <p>
+                    Clarifier un besoin professionnel : objectif, contexte,
+                    compétences, durée.
+                  </p>
+                  <div class="row">
+                    <span></span
+                    ><button class="btn" id="openGuideOrga">
+                      Accéder à la Boîte à outils
+                    </button>
+                  </div>
+                </article>
+                <article class="card">
+                  <h3 class="title">Je suis une entreprise</h3>
+                  <p>
+                    Décrire une offre Pro Bono : portée, disponibilités,
+                    livrables, modalités.
+                  </p>
+                  <div class="row">
+                    <span></span
+                    ><button class="btn" id="openGuideEnt">
+                      Accéder à la Boîte à outils
+                    </button>
+                  </div>
+                </article>
+              </div>
+              <div class="success-teaser">
+                <div class="row">
+                  <div>
+                    <h3 class="title" style="margin-bottom: 6px">
+                      Nos cas de succès
+                    </h3>
+                    <p class="meta" style="max-width: 760px">
+                      Découvrez comment l’expertise Pro Bono s’est transformée
+                      en impact réel. Chaque histoire montre une collaboration
+                      simple, humaine et efficace.
+                    </p>
+                  </div>
+                  <div>
+                    <button class="btn link-like" id="homeToSuccess">
+                      Voir les cas de succès
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- PAGE 1 : Babillard -->
+    <main id="pageBoard" style="display: none">
+      <div class="wrap">
+        <!-- Filtres -->
+        <section class="filters" aria-label="Filtres du babillard">
+          <div class="field">
+            <label for="search">Recherche</label>
+            <input
+              id="search"
+              type="search"
+              placeholder="Mot-clé, organisme, entreprise…"
+            />
+          </div>
+          <div class="field">
+            <label for="type">Type</label>
+            <select id="type">
+              <option value="all">Tous</option>
+              <option value="service">
+                Services professionnels (pro bono)
+              </option>
+              <option value="benevolat">
+                Bénévolat (rôles professionnels)
+              </option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="categorie">Catégorie</label>
+            <select id="categorie"></select>
+          </div>
+          <div class="field">
+            <label for="lieu">Lieu</label>
+            <input id="lieu" type="text" placeholder="Ex. Montréal, Laval…" />
+          </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Résultats -->
+        <section class="board" id="board" aria-live="polite"></section>
+        <p class="empty" id="emptyState">
+          Aucune offre ne correspond pour le moment. Essayez d'élargir vos
+          filtres.
+        </p>
+      </div>
+    </main>
+
+    <!-- PAGE 2 : Cas de succès -->
+    <main id="pageSuccess" style="display: none">
+      <div class="wrap">
+        <h2 class="block-stylised-title theme-block aligndefault">
+          <span
+            class="block-stylised-title__line block-stylised-title__line--big-bold"
+            >Cas de succès</span
+          ><span
+            class="block-stylised-title__line block-stylised-title__line--small"
+            >Collaborations pro bono réussies</span
+          >
+        </h2>
+
+        <section class="filters" aria-label="Filtres cas de succès">
+          <div class="field">
+            <label for="s_domain">Domaine</label>
+            <select id="s_domain">
+              <option value="all">Tous</option>
+              <option>Création de site Web</option>
+              <option>Comptabilité / Audit</option>
+              <option>SEO / Marketing numérique</option>
+              <option>Data & BI (Power BI)</option>
+              <option>Ressources humaines / Recrutement</option>
+              <option>Design graphique</option>
+              <option>Conseil juridique</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="s_year">Année</label>
+            <select id="s_year">
+              <option value="all">Toutes</option>
+              <option>2025</option>
+              <option>2024</option>
+              <option>2023</option>
+            </select>
+          </div>
+        </section>
+
+        <section class="reviews" id="successBoard"></section>
+        <p class="empty" id="successEmpty">
+          Aucun cas ne correspond aux filtres.
+        </p>
+      </div>
+    </main>
+
+    <!-- PAGE 3 : Boîte à outils (préparée pour accueillir les PDF/PPT) -->
+    <main id="pageToolbox" style="display: none">
+      <div class="wrap">
+        <h2 class="block-stylised-title theme-block aligndefault">
+          <span
+            class="block-stylised-title__line block-stylised-title__line--big-bold"
+            >Boîte à outils Pro Bono</span
+          >
+          <span
+            class="block-stylised-title__line block-stylised-title__line--small"
+            >Guides à télécharger (PDF &amp; PPT) — bientôt disponibles</span
+          >
+        </h2>
+        <p class="meta" style="margin: 10px 0 18px">
+          Cette page est prête. Déposez vos fichiers plus tard et remplacez les
+          boutons « Bientôt disponible » par des liens.
+        </p>
+
+        <h3 class="title" id="orga">Je suis un organisme</h3>
+        <div class="download-grid" style="margin: 8px 0 18px">
+          <div class="download">
+            <span class="icon"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 3v12" />
+                <path d="M8 11l4 4 4-4" />
+                <path d="M4 19h16" /></svg
+            ></span>
+            <div class="meta">
+              <strong>Guide Organisme (PDF)</strong
+              ><small>Définir l’objectif, le contexte et la durée</small>
+            </div>
+            <span class="soon" title="À venir">Bientôt disponible</span>
+          </div>
+          <div class="download">
+            <span class="icon"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="4" width="18" height="14" rx="2" />
+                <path d="M7 8h10" />
+                <path d="M7 12h6" /></svg
+            ></span>
+            <div class="meta">
+              <strong>Modèle de brief (PPT)</strong
+              ><small>Structure de demande à partager à l’entreprise</small>
+            </div>
+            <span class="soon" title="À venir">Bientôt disponible</span>
+          </div>
+        </div>
+
+        <h3 class="title" id="ent">Je suis une entreprise</h3>
+        <div class="download-grid">
+          <div class="download">
+            <span class="icon"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 3v12" />
+                <path d="M8 11l4 4 4-4" />
+                <path d="M4 19h16" /></svg
+            ></span>
+            <div class="meta">
+              <strong>Guide Entreprise (PDF)</strong
+              ><small>Portée, livrables, disponibilités, modalités</small>
+            </div>
+            <span class="soon" title="À venir">Bientôt disponible</span>
+          </div>
+          <div class="download">
+            <span class="icon"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="4" width="18" height="14" rx="2" />
+                <path d="M7 8h10" />
+                <path d="M7 12h6" /></svg
+            ></span>
+            <div class="meta">
+              <strong>Modèle d’offre (PPT)</strong
+              ><small>Gabarit pour décrire une intervention Pro Bono</small>
+            </div>
+            <span class="soon" title="À venir">Bientôt disponible</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- DIALOG : Appliquer -->
+    <dialog id="applyDialog">
+      <form method="dialog" class="modal" id="applyForm">
+        <header class="wrap" style="padding: 14px 18px; background: #fff">
+          <h3>Appliquer à l'offre</h3>
+          <p id="applyContext" class="meta" style="margin-top: 6px"></p>
+        </header>
+        <div class="wrap" style="padding: 12px 18px">
+          <div class="grid">
+            <div class="f" id="a_type_group">
+              <label for="a_type">Type d'offre</label>
+              <select id="a_type" name="type" required>
+                <option value="service">
+                  Service professionnel (pro bono)
+                </option>
+                <option value="benevolat">
+                  Bénévolat (rôle professionnel)
+                </option>
+              </select>
+            </div>
+            <div class="f">
+              <label for="a_service">Service / rôle</label>
+              <select id="a_service" name="service" required></select>
+            </div>
+            <div
+              class="f col-span-2"
+              id="a_service_autre_wrap"
+              style="display: none"
+            >
+              <label for="a_service_autre">Précision (Autre)</label>
+              <input
+                id="a_service_autre"
+                name="service_autre"
+                placeholder="Décrivez le service ou la compétence"
+              />
+            </div>
+            <div class="f">
+              <label for="a_nom">Votre nom</label>
+              <input id="a_nom" name="nom" required />
+            </div>
+            <div class="f">
+              <label for="a_org">Votre organisation / entreprise</label>
+              <input
+                id="a_org"
+                name="organisation"
+                placeholder="Ex. Hydro‑Québec, Moisson Montréal…"
+              />
+            </div>
+            <div class="f">
+              <label for="a_email">Courriel</label>
+              <input id="a_email" type="email" name="email" required />
+            </div>
+            <div class="f">
+              <label for="a_tel">Téléphone</label>
+              <input id="a_tel" name="tel" placeholder="Optionnel" />
+            </div>
+            <div class="f col-span-2" id="bloc_besoins">
+              <label for="a_besoins"
+                >Précisez vos besoins (si service pro) ou votre profil de
+                compétences (si bénévolat pro)</label
+              >
+              <textarea
+                id="a_besoins"
+                name="besoins"
+                rows="4"
+                placeholder="Ex. Audit comptable léger; automatiser un tableau Excel; rédaction de subventions, etc."
+              ></textarea>
+            </div>
+            <!-- Spécifique selon type -->
+            <div class="f" id="a_wrap_dispo" style="display: none">
+              <label id="a_dispo_label" for="a_dispo"
+                >Disponibilités (Entreprise)</label
+              >
+              <input
+                id="a_dispo"
+                name="dispo"
+                placeholder="Ex. Soirs de semaine, 5h/sem pendant 1 mois"
+              />
+            </div>
+            <div class="f" id="a_wrap_modalite" style="display: none">
+              <label id="a_modalite_label" for="a_modalite"
+                >Modalité préférée (Entreprise)</label
+              >
+              <select id="a_modalite" name="modalite">
+                <option>Présentiel</option>
+                <option>Hybride</option>
+                <option>Distance</option>
+              </select>
+            </div>
+            <div class="f" id="a_wrap_duree" style="display: none">
+              <label id="a_duree_label" for="a_duree"
+                >Durée du besoin (Organisme)</label
+              >
+              <select id="a_duree" name="duree">
+                <option>1 semaine</option>
+                <option>2 semaines</option>
+                <option>1 mois</option>
+                <option>3 mois</option>
+                <option>6 mois</option>
+                <option>À déterminer</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <footer>
+          <button class="btn" id="applyCancel" type="button">Annuler</button>
+          <button class="btn btn-primary" value="submit">
+            Envoyer la candidature
+          </button>
+        </footer>
+      </form>
+    </dialog>
+
+    <!-- DIALOG : Choix type de publication -->
+    <dialog id="typeDialog">
+      <form method="dialog" class="modal" id="typeForm">
+        <header class="wrap" style="padding: 14px 18px; background: #fff">
+          <h3>Quel type d'offre veux-tu publier ?</h3>
+          <p class="meta">Choisis pour adapter le formulaire.</p>
+        </header>
+        <div class="wrap" style="padding: 12px 18px">
+          <div class="choice-grid">
+            <button
+              class="choice"
+              id="chooseService"
+              value="service"
+              type="submit"
+            >
+              <h4>Service professionnel (pro bono)</h4>
+              <p>Offert par une entreprise pour un organisme.</p>
+            </button>
+            <button
+              class="choice"
+              id="chooseBenevolat"
+              value="benevolat"
+              type="submit"
+            >
+              <h4>Bénévolat — rôle professionnel</h4>
+              <p>Rôle de bureau/compétences au sein d'un organisme.</p>
+            </button>
+          </div>
+        </div>
+        <footer>
+          <button class="btn" id="typeCancel" type="button">Annuler</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <!-- DIALOG : Publier -->
+    <dialog id="postDialog">
+      <form method="dialog" class="modal" id="postForm">
+        <header class="wrap" style="padding: 14px 18px; background: #fff">
+          <h3 id="postHeaderTitle">Publier une offre</h3>
+          <p class="meta">
+            Démo locale — ajoute l'offre au babillard dans votre navigateur.
+          </p>
+        </header>
+        <div class="wrap" style="padding: 12px 18px">
+          <div class="grid">
+            <div class="f">
+              <label for="p_type">Type</label>
+              <select id="p_type" required>
+                <option value="service">
+                  Service professionnel (pro bono)
+                </option>
+                <option value="benevolat">
+                  Bénévolat (rôle professionnel)
+                </option>
+              </select>
+            </div>
+            <div class="f">
+              <label for="p_service">Catégorie</label>
+              <select id="p_service" required></select>
+            </div>
+            <div
+              class="f col-span-2"
+              id="p_service_autre_wrap"
+              style="display: none"
+            >
+              <label for="p_service_autre">Précision (Autre)</label>
+              <input
+                id="p_service_autre"
+                placeholder="Décrivez le service ou la compétence"
+              />
+            </div>
+            <div class="f">
+              <label for="p_titre">Titre de l'offre</label>
+              <input
+                id="p_titre"
+                placeholder="Ex. Revue d'états financiers, refonte site Web, optimisation SEO…"
+                required
+              />
+            </div>
+            <div class="f">
+              <label for="p_org" id="p_org_label">Organisme / Entreprise</label>
+              <input id="p_org" required />
+            </div>
+            <div class="f">
+              <label for="p_lieu">Lieu</label>
+              <input id="p_lieu" placeholder="Ex. Montréal, Laval…" />
+            </div>
+            <div class="f">
+              <label for="p_desc">Description</label>
+              <textarea
+                id="p_desc"
+                rows="4"
+                placeholder="Contexte et attentes"
+              ></textarea>
+            </div>
+            <!-- Spécifique selon type -->
+            <div class="f" id="p_wrap_dispo" style="display: none">
+              <label for="p_dispo"
+                >Disponibilités proposées (service pro)</label
+              >
+              <input
+                id="p_dispo"
+                placeholder="Ex. 5 h/sem pendant 4 semaines; soirées"
+              />
+            </div>
+            <div class="f" id="p_wrap_modalite" style="display: none">
+              <label for="p_modalite">Mode de rencontre préférable</label>
+              <select id="p_modalite">
+                <option>Présentiel</option>
+                <option>Hybride</option>
+                <option>Distance</option>
+              </select>
+            </div>
+            <div class="f" id="p_wrap_duree" style="display: none">
+              <label for="p_duree">Durée du besoin (bénévolat pro)</label>
+              <select id="p_duree">
+                <option>1 semaine</option>
+                <option>2 semaines</option>
+                <option>1 mois</option>
+                <option>3 mois</option>
+                <option>6 mois</option>
+                <option>À déterminer</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <footer>
+          <button class="btn" id="postCancel" type="button">Annuler</button>
+          <button class="btn btn-primary" value="submit">Publier</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <!-- Scripts -->
+    <script>
+      // Helpers compacts
+      const $ = (id) => document.getElementById(id);
+      const on = (el, ev, cb) => el && el.addEventListener(ev, cb);
+      const onAll = (nodes, ev, cb) => nodes.forEach((n) => on(n, ev, cb));
+      const show = (el, b) => {
+        if (el) el.style.display = b ? "block" : "none";
+      };
+
+      // Données
+      const SERVICE_OPTIONS = [
+        "Comptabilité / Audit",
+        "Excel / Automatisation",
+        "Création de site Web",
+        "SEO / Marketing numérique",
+        "Conseil juridique",
+        "Ressources humaines / Recrutement",
+        "Traduction (FR‑EN‑AR)",
+        "Design graphique",
+        "Data & BI (Power BI)",
+        "Cybersécurité",
+        "Gestion de projet (PMO)",
+        "Rédaction de subventions",
+        "Communication / Médias sociaux",
+        "Support administratif",
+        "Autre…",
+      ];
+      const seedOffers = [
+        {
+          type: "service",
+          titre: "Revue et optimisation de modèles Excel",
+          categorie: "Excel / Automatisation",
+          org: "CGI Montréal",
+          lieu: "Montréal",
+          tags: ["Pro bono", "Automatisation"],
+          desc: "Automatiser un tableau de bord financier (macros optionnelles) pour un organisme communautaire.",
+        },
+        {
+          type: "service",
+          titre: "Création d'un site vitrine accessible",
+          categorie: "Création de site Web",
+          org: "Lightspeed",
+          lieu: "Montréal",
+          tags: ["Accessibilité", "CMS"],
+          desc: "Mise en place d'un site WordPress (thème accessible, formation de base).",
+        },
+        {
+          type: "service",
+          titre: "Audit léger de cybersécurité",
+          categorie: "Cybersécurité",
+          org: "Desjardins",
+          lieu: "Laval",
+          tags: ["Sécurité", "Sensibilisation"],
+          desc: "Revue des pratiques, recommandations 1‑2 pages, formation phishing.",
+        },
+        {
+          type: "service",
+          titre: "Design d'affiches et gabarits",
+          categorie: "Design graphique",
+          org: "Ubisoft Montréal",
+          lieu: "Montréal",
+          tags: ["Branding", "Canva"],
+          desc: "Création d'affiches pour campagne locale + gabarits réutilisables.",
+        },
+        {
+          type: "service",
+          titre: "Atelier RH — recrutement de bénévoles",
+          categorie: "Ressources humaines / Recrutement",
+          org: "PwC Canada",
+          lieu: "Montréal",
+          tags: ["RH", "Processus"],
+          desc: "Co‑conception d'un mini‑processus d'acquisition de bénévoles.",
+        },
+        {
+          type: "service",
+          titre: "Optimisation SEO locale",
+          categorie: "SEO / Marketing numérique",
+          org: "Shopify (Montréal)",
+          lieu: "Montréal",
+          tags: ["SEO", "Référencement"],
+          desc: "Amélioration SEO locale pour accroître la portée des appels aux dons.",
+        },
+        {
+          type: "service",
+          titre: "Modèle Power BI — indicateurs d'impact",
+          categorie: "Data & BI (Power BI)",
+          org: "Banque Nationale",
+          lieu: "Montréal",
+          tags: ["KPI", "Données"],
+          desc: "Tableau de bord simple: bénéficiaires, heures, dons.",
+        },
+        {
+          type: "service",
+          titre: "Conseils juridiques de base (OSBL)",
+          categorie: "Conseil juridique",
+          org: "Fasken (pro bono)",
+          lieu: "Montréal",
+          tags: ["Juridique", "OSBL"],
+          desc: "Questions générales OSBL, politiques internes (non‑contentieux).",
+        },
+        {
+          type: "service",
+          titre: "PMO express — cadrer un mini‑projet",
+          categorie: "Gestion de projet (PMO)",
+          org: "Bombardier",
+          lieu: "Montréal",
+          tags: ["Charte", "Plan"],
+          desc: "Atelier de cadrage + charte projet 1 page.",
+        },
+        {
+          type: "service",
+          titre: "Traduction FR‑EN de documents",
+          categorie: "Traduction (FR‑EN‑AR)",
+          org: "Hydro‑Québec",
+          lieu: "Montréal",
+          tags: ["Traduction", "Bilingue"],
+          desc: "Traduction de 10‑15 pages (infos bénévolat/dons).",
+        },
+        {
+          type: "benevolat",
+          titre: "Soutien comptable (OSBL)",
+          categorie: "Comptabilité / Audit",
+          org: "Accueil Bonneau",
+          lieu: "Montréal",
+          tags: ["Pro", "Bureau"],
+          desc: "Aide à la tenue de livres et à la préparation de rapports simples (accompagnement bénévole).",
+        },
+        {
+          type: "benevolat",
+          titre: "Assistant(e) communication / médias sociaux",
+          categorie: "Communication / Médias sociaux",
+          org: "Mission Old Brewery",
+          lieu: "Montréal",
+          tags: ["Pro", "Hybride"],
+          desc: "Planification et rédaction de publications, gabarits Canva.",
+        },
+        {
+          type: "benevolat",
+          titre: "Support RH — dossiers bénévoles",
+          categorie: "Ressources humaines / Recrutement",
+          org: "Le Chaînon",
+          lieu: "Montréal",
+          tags: ["Pro", "Bureau"],
+          desc: "Mise à jour de dossiers, organisation d'entrevues, suivi de références.",
+        },
+        {
+          type: "benevolat",
+          titre: "Aide Power BI / Data",
+          categorie: "Data & BI (Power BI)",
+          org: "Moisson Montréal",
+          lieu: "Montréal",
+          tags: ["Pro", "Data"],
+          desc: "Nettoyage Excel et mise à jour de visuels Power BI sous supervision.",
+        },
+        {
+          type: "benevolat",
+          titre: "Rédaction de subventions",
+          categorie: "Rédaction de subventions",
+          org: "Dans la rue",
+          lieu: "Montréal",
+          tags: ["Pro", "Rédaction"],
+          desc: "Recherche d'appels à projets, montage de dossiers, relecture.",
+        },
+        {
+          type: "benevolat",
+          titre: "Webmestre bénévole (site existant)",
+          categorie: "Création de site Web",
+          org: "Petites‑Mains",
+          lieu: "Montréal",
+          tags: ["Pro", "Web"],
+          desc: "Mise à jour de contenu, correctifs CSS/SEO de base.",
+        },
+        {
+          type: "benevolat",
+          titre: "Assistant(e) juridique (non‑contentieux)",
+          categorie: "Conseil juridique",
+          org: "La rue des Femmes",
+          lieu: "Montréal",
+          tags: ["Pro", "Juridique"],
+          desc: "Organisation de ressources juridiques, guides internes, références.",
+        },
+        {
+          type: "benevolat",
+          titre: "Coordination logistique (bureau)",
+          categorie: "Support administratif",
+          org: "Parole d'excluEs",
+          lieu: "Montréal‑Nord",
+          tags: ["Pro", "Bureau"],
+          desc: "Calendrier, suivi fournisseurs, préparation de documents.",
+        },
+        {
+          type: "benevolat",
+          titre: "SEO local — sensibilisation",
+          categorie: "SEO / Marketing numérique",
+          org: "La Tablée des Chefs",
+          lieu: "Montréal",
+          tags: ["Pro", "SEO"],
+          desc: "Optimisation de fiches locales, balises, contenus info‑donateurs.",
+        },
+        {
+          type: "benevolat",
+          titre: "Designer graphique bénévole",
+          categorie: "Design graphique",
+          org: "Renaissance",
+          lieu: "Montréal",
+          tags: ["Pro", "Design"],
+          desc: "Affiches, bannières web, gabarits pour campagnes.",
+        },
+      ];
+      const successCases = [
+        {
+          titre: "Refonte Web inclusive",
+          domaine: "Création de site Web",
+          annee: 2025,
+          entreprise: "Lightspeed",
+          organisme: "Moisson Montréal",
+          temoignage:
+            "Une visibilité accrue et une gestion autonome du contenu. L'équipe a été présente et à l'écoute.",
+        },
+        {
+          titre: "Parcours de bénévoles modernisé",
+          domaine: "Ressources humaines / Recrutement",
+          annee: 2025,
+          entreprise: "PwC Canada",
+          organisme: "Le Chaînon",
+          temoignage:
+            "Des gabarits simples et efficaces. On gagne un temps précieux sur chaque recrutement.",
+        },
+        {
+          titre: "Identité de campagne d'automne",
+          domaine: "Design graphique",
+          annee: 2025,
+          entreprise: "Ubisoft Montréal",
+          organisme: "Renaissance",
+          temoignage: "Des visuels percutants et cohérents avec notre mission.",
+        },
+        {
+          titre: "Atelier juridique OSBL",
+          domaine: "Conseil juridique",
+          annee: 2025,
+          entreprise: "Fasken (pro bono)",
+          organisme: "Petites‑Mains",
+          temoignage:
+            "Des balises claires qui rassurent nos équipes et notre C.A.",
+        },
+        {
+          titre: "Processus d'audit simplifié",
+          domaine: "Comptabilité / Audit",
+          annee: 2024,
+          entreprise: "CGI Montréal",
+          organisme: "Accueil Bonneau",
+          temoignage:
+            "Bilans plus rapides et une documentation claire pour nos bénévoles.",
+        },
+        {
+          titre: "SEO local pour mobiliser",
+          domaine: "SEO / Marketing numérique",
+          annee: 2024,
+          entreprise: "Shopify (Montréal)",
+          organisme: "Dans la rue",
+          temoignage:
+            "Plus d'appels de nouveaux bénévoles et une meilleure compréhension de notre contenu.",
+        },
+        {
+          titre: "Mini site de campagne hivernale",
+          domaine: "Création de site Web",
+          annee: 2024,
+          entreprise: "Lightspeed",
+          organisme: "Petites‑Mains",
+          temoignage: "Mise en ligne rapide et facile à mettre à jour.",
+        },
+        {
+          titre: "Boîte à outils recrutement",
+          domaine: "Ressources humaines / Recrutement",
+          annee: 2024,
+          entreprise: "Banque Nationale",
+          organisme: "Mission Old Brewery",
+          temoignage:
+            "Un processus plus fluide du premier contact à l'accueil.",
+        },
+        {
+          titre: "Tableau de bord d'impact",
+          domaine: "Data & BI (Power BI)",
+          annee: 2023,
+          entreprise: "Banque Nationale",
+          organisme: "La rue des Femmes",
+          temoignage:
+            "Nous suivons mieux nos résultats et nos besoins au quotidien.",
+        },
+        {
+          titre: "Refonte de gabarits de communication",
+          domaine: "Communication / Médias sociaux",
+          annee: 2023,
+          entreprise: "Lightspeed",
+          organisme: "Mission Old Brewery",
+          temoignage:
+            "Des gabarits accessibles qui facilitent la continuité avec les bénévoles.",
+        },
+        {
+          titre: "Atelier PMO express",
+          domaine: "Gestion de projet (PMO)",
+          annee: 2023,
+          entreprise: "Bombardier",
+          organisme: "Parole d'excluEs",
+          temoignage:
+            "Un cadrage concret qui a débloqué un projet prioritaire.",
+        },
+        {
+          titre: "Traduction FR‑EN de ressources clés",
+          domaine: "Traduction (FR‑EN‑AR)",
+          annee: 2023,
+          entreprise: "Hydro‑Québec",
+          organisme: "Moisson Montréal",
+          temoignage:
+            "Nous rejoignons mieux notre communauté anglophone. Merci pour la rigueur.",
+        },
+      ];
+
+      // Sélecteurs
+      const boardEl = $("board"),
+        emptyEl = $("emptyState"),
+        searchEl = $("search"),
+        typeEl = $("type"),
+        catEl = $("categorie"),
+        lieuEl = $("lieu");
+      const btnPost = $("btnPost"),
+        btnFilterService = $("btnFilterService"),
+        btnFilterBenevolat = $("btnFilterBenevolat"),
+        btnSuccess = $("btnSuccess");
+      const btnHome = $("btnHome"),
+        btnGuides = $("btnGuides");
+      const applyDialog = $("applyDialog"),
+        applyCtx = $("applyContext"),
+        aType = $("a_type"),
+        aTypeGroup = $("a_type_group"),
+        aService = $("a_service"),
+        aServiceAutreWrap = $("a_service_autre_wrap");
+      const aDispoWrap = $("a_wrap_dispo"),
+        aModaliteWrap = $("a_wrap_modalite"),
+        aDureeWrap = $("a_wrap_duree");
+      const postDialog = $("postDialog"),
+        pType = $("p_type"),
+        pService = $("p_service"),
+        pServiceAutreWrap = $("p_service_autre_wrap"),
+        pDispoWrap = $("p_wrap_dispo"),
+        pModaliteWrap = $("p_wrap_modalite"),
+        pDureeWrap = $("p_wrap_duree");
+      const typeDialog = $("typeDialog"),
+        typeForm = $("typeForm");
+      const pageHome = $("pageHome"),
+        pageBoard = $("pageBoard"),
+        pageSuccess = $("pageSuccess");
+      const sDomain = $("s_domain"),
+        sYear = $("s_year"),
+        successBoard = $("successBoard"),
+        successEmpty = $("successEmpty");
+      const pageToolbox = $("pageToolbox");
+
+      // Inits selects
+      const optHtml = (a) =>
+        a.map((o) => `<option value="${o}">${o}</option>`).join("");
+      aService.innerHTML = optHtml(SERVICE_OPTIONS);
+      pService.innerHTML = optHtml(SERVICE_OPTIONS);
+      catEl.innerHTML =
+        '<option value="all">Toutes</option>' + optHtml(SERVICE_OPTIONS);
+      const showHideAutre = (sel, wrap) =>
+        show(wrap, sel.value.startsWith("Autre"));
+      on(aService, "change", () => showHideAutre(aService, aServiceAutreWrap));
+      on(pService, "change", () => showHideAutre(pService, pServiceAutreWrap));
+
+      // Icônes compact
+      const ICONS = {
+        "Comptabilité / Audit":
+          '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8"/><path d="M8 11h.01"/><path d="M12 11h.01"/><path d="M16 11h.01"/><path d="M8 15h.01"/><path d="M12 15h.01"/><path d="M16 15h.01"/>',
+        "Excel / Automatisation":
+          '<path d="M3 20h18"/><rect x="6" y="10" width="3" height="7"/><rect x="11" y="6" width="3" height="11"/><rect x="16" y="12" width="3" height="5"/>',
+        "Création de site Web":
+          '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M7 20h10"/><path d="M12 16v4"/>',
+        "SEO / Marketing numérique":
+          '<path d="M3 11v2"/><path d="M5 12h6l7 4V8l-7 4H5z"/><path d="M6 12v3a2 2 0 0 0 2 2h2"/>',
+        "Conseil juridique":
+          '<path d="M12 3v18"/><path d="M6 7h12"/><path d="M6 7l-3 5h6l-3-5z"/><path d="M18 7l-3 5h6l-3-5z"/>',
+        "Ressources humaines / Recrutement":
+          '<circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M2 20a6 6 0 0 1 12 0"/><path d="M10 20h12a6 6 0 0 0-6-6"/>',
+        "Traduction (FR‑EN‑AR)":
+          '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 0 18"/><path d="M12 3a15 15 0 0 0 0 18"/>',
+        "Design graphique":
+          '<path d="M12 3a9 9 0 1 0 0 18c2 0 3-1 3-2.5S13.5 16 12 16"/><path d="M7 10h.01"/><path d="M9.5 7.5h.01"/><path d="M14.5 7.5h.01"/><path d="M17 10h.01"/>',
+        "Data & BI (Power BI)":
+          '<path d="M12 12V3a9 9 0 1 1-9 9h9z"/><path d="M12 12h9A9 9 0 0 0 12 3v9z"/>',
+        Cybersécurité:
+          '<path d="M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7l7-4z"/>',
+        "Gestion de projet (PMO)":
+          '<rect x="6" y="4" width="12" height="16" rx="2"/><rect x="9" y="2" width="6" height="4" rx="1"/>',
+        "Rédaction de subventions":
+          '<path d="M3 21l3-1 11-11-2-2L4 18l-1 3z"/><path d="M14 5l2 2"/>',
+        "Communication / Médias sociaux":
+          '<path d="M21 15a3 3 0 0 1-3 3H8l-4 3V6a3 3 0  1 3-3h11a3 3 0 0 1 3 3z"/>',
+        "Support administratif":
+          '<rect x="3" y="7" width="18" height="13" rx="2"/><rect x="3" y="3" width="18" height="4" rx="1"/><path d="M9 12h6"/>',
+      };
+      const svg = (i) =>
+        `<span class="icon" title="catégorie"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${i}</svg></span>`;
+
+      // Rendu Board
+      let allOffers = [...seedOffers],
+        visibleCount = 12;
+      const card = (o) => `<article class="card" aria-label="${o.titre}">
+      <div class="row"><div>${
+        o.type === "service"
+          ? '<span class="badge red">Pro bono — Service pro</span>'
+          : '<span class="badge green">Bénévolat — Rôle professionnel</span>'
+      }</div><div class="pill">${o.categorie}</div></div>
+      <h3 class="title">${o.titre}</h3>
+      <div class="meta">${o.org} • ${o.lieu || "Grand Montréal"}</div>
+      <p>${o.desc || ""}</p>
+      <div class="tags">${[
+        ...(o.tags || []),
+        o.modalite || "",
+        o.dispo || "",
+        o.duree ? `Durée: ${o.duree}` : "",
+      ]
+        .filter(Boolean)
+        .map((t) => `<span class=tag>${t}</span>`)
+        .join("")}</div>
+      <div class="row"><div class="icons">${svg(
+        ICONS[o.categorie] ||
+          '<rect x="4" y="4" width="16" height="16" rx="3"/>'
+      )}</div><button class="btn btn-primary" data-apply>Appliquer</button></div>
+    </article>`;
+      function render() {
+        const q = searchEl.value.toLowerCase().trim(),
+          t = typeEl.value,
+          c = catEl.value,
+          l = lieuEl.value.toLowerCase().trim();
+        const items = allOffers
+          .filter(
+            (o) =>
+              (!q ||
+                `${o.titre} ${o.org} ${o.desc} ${(o.tags || []).join(" ")}`
+                  .toLowerCase()
+                  .includes(q)) &&
+              (t === "all" || o.type === t) &&
+              (c === "all" || o.categorie === c) &&
+              (!l || (o.lieu || "").toLowerCase().includes(l))
+          )
+          .slice(0, visibleCount);
+        boardEl.innerHTML = items.map(card).join("");
+        emptyEl.style.display = items.length ? "none" : "block";
+        boardEl
+          .querySelectorAll("[data-apply]")
+          .forEach((b, i) => on(b, "click", () => openApply(items[i])));
+      }
+
+      // Application (logique validée)
+      function setApplyUI(kind) {
+        show(aDispoWrap, kind === "benevolat");
+        show(aModaliteWrap, kind === "benevolat");
+        show(aDureeWrap, kind === "service");
+      }
+      function openApply(offer) {
+        applyCtx.textContent = `${
+          offer.type === "service"
+            ? "Service professionnel"
+            : "Bénévolat — rôle professionnel"
+        } — ${offer.categorie} • ${offer.org}`;
+        aType.value = offer.type;
+        aType.disabled = true;
+        show(aTypeGroup, false);
+        aService.value = SERVICE_OPTIONS.includes(offer.categorie)
+          ? offer.categorie
+          : "Autre…";
+        showHideAutre(aService, aServiceAutreWrap);
+        setApplyUI(offer.type);
+        applyDialog.showModal();
+      }
+
+      // Publication
+      function adaptPostForm(kind) {
+        if (kind !== "service" && kind !== "benevolat") return;
+        const h = $("postHeaderTitle"),
+          l = $("p_org_label"),
+          ti = $("p_titre");
+        if (kind === "service") {
+          pType.value = "service";
+          if (h) h.textContent = "Publier un service professionnel (pro bono)";
+          if (l) l.textContent = "Entreprise (offrant le service)";
+          if (ti)
+            ti.placeholder =
+              "Ex. Revue d'états financiers, refonte site Web, optimisation SEO…";
+          show(pDispoWrap, true);
+          show(pModaliteWrap, true);
+          show(pDureeWrap, false);
+        } else {
+          pType.value = "benevolat";
+          if (h) h.textContent = "Publier un rôle de bénévolat professionnel";
+          if (l) l.textContent = "Organisme (demandant le rôle)";
+          if (ti)
+            ti.placeholder =
+              "Ex. Rédaction de subventions, Assistant·e communication, Support RH…";
+          show(pDispoWrap, false);
+          show(pModaliteWrap, false);
+          show(pDureeWrap, true);
+        }
+      }
+
+      // Cas de succès
+      const successCard = (c) =>
+        `<article class='review-card'><div class='review-head'><h3 class='review-title'>${c.titre}</h3><span class='review-pill'>${c.domaine}</span></div><div class='review-meta'>${c.entreprise} bénévole pour ${c.organisme} • ${c.annee}</div><blockquote class='meta' style='margin:10px 0 0 0; font-size:14px'>&ldquo;${c.temoignage}&rdquo;</blockquote></article>`;
+      function renderSuccess() {
+        const d = sDomain.value,
+          y = sYear.value,
+          list = successCases.filter(
+            (c) =>
+              (d === "all" || c.domaine === d) &&
+              (y === "all" || String(c.annee) === y)
+          );
+        successBoard.innerHTML = list.map(successCard).join("");
+        successEmpty.style.display = list.length ? "none" : "block";
+      }
+
+      // Router hash-based robuste
+      const PAGES = {
+        home: pageHome,
+        board: pageBoard,
+        success: pageSuccess,
+        toolbox: pageToolbox,
+      };
+      function navigate(to) {
+        if (!PAGES[to]) to = "home";
+        Object.entries(PAGES).forEach(([k, el]) => {
+          if (el) el.style.display = k === to ? "block" : "none";
+        });
+        btnHome?.setAttribute("aria-pressed", String(to === "home"));
+        btnSuccess?.setAttribute("aria-pressed", String(to === "success"));
+        btnGuides?.setAttribute("aria-pressed", String(to === "toolbox"));
+        btnFilterService?.setAttribute(
+          "aria-pressed",
+          String(to === "board" && typeEl.value === "service")
+        );
+        btnFilterBenevolat?.setAttribute(
+          "aria-pressed",
+          String(to === "board" && typeEl.value === "benevolat")
+        );
+        if (to === "success") renderSuccess();
+        else if (to === "board") {
+          syncTypeBtns();
+          render();
+        }
+      }
+      const goto = (to) => {
+        try {
+          location.hash = to;
+        } catch (_) {}
+        navigate(to);
+      };
+
+      // Listeners
+      on(btnHome, "click", () => goto("home"));
+      on(btnSuccess, "click", () => goto("success"));
+      on(btnPost, "click", () => typeDialog.showModal());
+      on(typeForm, "submit", (e) => {
+        const s = e.submitter;
+        if (s && (s.value === "service" || s.value === "benevolat"))
+          typeDialog.returnValue = s.value;
+      });
+      on(typeDialog, "close", () => {
+        if (
+          typeDialog.returnValue === "service" ||
+          typeDialog.returnValue === "benevolat"
+        ) {
+          adaptPostForm(typeDialog.returnValue);
+          postDialog.showModal();
+        }
+      });
+      ["applyCancel", "postCancel", "typeCancel"].forEach((id) =>
+        on($(id), "click", () => {
+          const d =
+            id === "applyCancel"
+              ? applyDialog
+              : id === "postCancel"
+              ? postDialog
+              : typeDialog;
+          try {
+            d.close("cancel");
+          } catch (_) {
+            d.open = false;
+          }
+        })
+      );
+      on(postDialog, "close", () => {
+        if (postDialog.returnValue === "submit") {
+          const o = {
+            type: pType.value,
+            titre: $("p_titre").value || "(Sans titre)",
+            categorie: pService.value,
+            org:
+              $("p_org").value ||
+              (pType.value === "service" ? "Entreprise" : "Organisme"),
+            lieu: $("p_lieu").value || "Grand Montréal",
+            desc: $("p_desc").value || "",
+            dispo: pType.value === "service" ? $("p_dispo").value : "",
+            modalite: pType.value === "service" ? $("p_modalite").value : "",
+            duree: pType.value === "benevolat" ? $("p_duree").value : "",
+            tags: ["Nouveau"],
+          };
+          allOffers.unshift(o);
+          visibleCount = Math.max(12, visibleCount);
+          render();
+        }
+      });
+      function syncTypeBtns() {
+        btnFilterService.setAttribute(
+          "aria-pressed",
+          String(typeEl.value === "service")
+        );
+        btnFilterBenevolat.setAttribute(
+          "aria-pressed",
+          String(typeEl.value === "benevolat")
+        );
+      }
+      on(btnFilterService, "click", () => {
+        goto("board");
+        typeEl.value = "service";
+        visibleCount = 12;
+        render();
+        syncTypeBtns();
+      });
+      on(btnFilterBenevolat, "click", () => {
+        goto("board");
+        typeEl.value = "benevolat";
+        visibleCount = 12;
+        render();
+        syncTypeBtns();
+      });
+      onAll([searchEl, lieuEl], "input", () => {
+        visibleCount = 12;
+        render();
+        syncTypeBtns();
+      });
+      onAll([typeEl, catEl], "change", () => {
+        visibleCount = 12;
+        render();
+        syncTypeBtns();
+      });
+      on(sDomain, "change", renderSuccess);
+      on(sYear, "change", renderSuccess);
+
+      // Boîte à outils — page dédiée (pas de fichiers requis)
+      on(btnGuides, "click", () => goto("toolbox"));
+      document.addEventListener("click", (e) => {
+        const id = e.target?.id || "";
+        if (id === "openGuideEnt") {
+          goto("toolbox");
+          setTimeout(
+            () =>
+              document
+                .getElementById("ent")
+                ?.scrollIntoView({ behavior: "smooth" }),
+            0
+          );
+        }
+        if (id === "openGuideOrga") {
+          goto("toolbox");
+          setTimeout(
+            () =>
+              document
+                .getElementById("orga")
+                ?.scrollIntoView({ behavior: "smooth" }),
+            0
+          );
+        }
+        if (id === "goToBoard") {
+          goto("board");
+        }
+        if (id === "homeToSuccess") {
+          goto("success");
+        }
+      });
+
+      // Init (toujours Accueil)
+      (function () {
+        navigate("home");
+        try {
+          location.hash = "home";
+        } catch (_) {}
+        syncTypeBtns();
+      })();
+      window.addEventListener("hashchange", () =>
+        navigate((location.hash || "#home").replace("#", "") || "home")
+      );
+
+      // --- Mini tests (non intrusifs) ---
+      function runUnitTests() {
+        try {
+          console.assert(typeof navigate === "function", "navigate existe");
+          console.assert(typeof goto === "function", "goto existe");
+          console.assert(
+            !!(pageHome && pageBoard && pageSuccess),
+            "pages définies"
+          );
+          const prev = {
+            d: aDispoWrap.style.display,
+            m: aModaliteWrap.style.display,
+            du: aDureeWrap.style.display,
+          };
+          setApplyUI("benevolat");
+          console.assert(
+            aDispoWrap.style.display === "block" &&
+              aModaliteWrap.style.display === "block" &&
+              aDureeWrap.style.display === "none",
+            "UI apply bénévolat OK"
+          );
+          setApplyUI("service");
+          console.assert(
+            aDispoWrap.style.display === "none" &&
+              aModaliteWrap.style.display === "none" &&
+              aDureeWrap.style.display === "block",
+            "UI apply service OK"
+          );
+          aDispoWrap.style.display = prev.d;
+          aModaliteWrap.style.display = prev.m;
+          aDureeWrap.style.display = prev.du;
+          adaptPostForm("service");
+          console.assert(
+            pDispoWrap.style.display === "block" &&
+              pDureeWrap.style.display === "none",
+            "Post service OK"
+          );
+          adaptPostForm("benevolat");
+          console.assert(
+            pDispoWrap.style.display === "none" &&
+              pDureeWrap.style.display === "block",
+            "Post bénévolat OK"
+          );
+          console.log("Tests unitaires : OK");
+        } catch (e) {
+          console.error("Tests unitaires : échec", e);
+        }
+      }
+      setTimeout(runUnitTests, 0);
+    </script>
+  </body>
+</html>
