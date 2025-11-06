@@ -1,9 +1,3 @@
-git init
-git add .
-git commit -m "Initial commit - maquette"
-git branch -M main
-git remote add origin https://github.com/<ton-user>/centraide-probono.git
-git push -u origin main
 <!DOCTYPE html>
 <html lang="fr">
   <head>
